@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>About Us | GreenFields FPO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      html {
+        font-size: 16px;
+      }
+      body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        margin: 0;
+        background: linear-gradient(135deg, #e8f5e9 0%, #fffde7 100%);
+        color: #234d20;
+        line-height: 1.7;
+      }
+      .navbar {
+        background: #388e3c;
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        height: 60px;
+        box-shadow: 0 2px 8px rgba(56, 142, 60, 0.08);
+        transition: all 0.3s;
+        position: relative;
+      }
+      .navbar-links {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        transition: all 0.3s;
+      }
+      .navbar a {
+        color: #fff;
+        text-decoration: none;
+        margin-right: 28px;
+        font-size: 1.08em;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        transition: color 0.2s;
+      }
+      .navbar a:last-child {
+        margin-right: 0;
+      }
+      .navbar a.active,
+      .navbar a:hover {
+        color: #c8e6c9;
+      }
+      .logout-btn {
+        margin-left: auto;
+        background: #fff;
+        color: #388e3c;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 18px;
+        font-size: 1em;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s;
+      }
+      .logout-btn:hover {
+        background: #c8e6c9;
+        color: #1b5e20;
+      }
+      .container {
+        max-width: 950px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 36px 28px 32px 28px;
+        border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(56, 142, 60, 0.09);
+        width: 96%;
+      }
+      .about-header {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        margin-bottom: 18px;
+      }
+      .about-header img {
+        width: 70px;
+        height: 70px;
+        object-fit: contain;
+        border-radius: 50%;
+        background: #e8f5e9;
+        border: 2px solid #c8e6c9;
+      }
+      h1 {
+        color: #388e3c;
+        font-size: 2.2rem;
+        margin: 0;
+        letter-spacing: 1px;
+      }
+      h2 {
+        color: #558b2f;
+        margin-top: 32px;
+        font-size: 1.3rem;
+      }
+      .mission {
+        background: #f1f8e9;
+        border-left: 5px solid #81c784;
+        padding: 18px 22px;
+        border-radius: 6px;
+        margin: 18px 0 28px 0;
+        font-size: 1.08em;
+      }
+      .services {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 28px;
+        margin-top: 24px;
+      }
+      .service-card {
+        background: #e8f5e9;
+        border-radius: 8px;
+        padding: 22px 18px;
+        flex: 1 1 220px;
+        min-width: 180px;
+        box-shadow: 0 1px 6px rgba(56, 142, 60, 0.08);
+        transition: transform 0.15s;
+      }
+      .service-card:hover {
+        transform: translateY(-4px) scale(1.03);
+        box-shadow: 0 4px 16px rgba(56, 142, 60, 0.13);
+      }
+      .service-card strong {
+        color: #388e3c;
+        font-size: 1.1em;
+      }
+      ul {
+        margin: 14px 0 0 22px;
+      }
+      .values {
+        display: flex;
+        gap: 18px;
+        margin-top: 18px;
+        flex-wrap: wrap;
+      }
+      .value-item {
+        background: #fffde7;
+        border-left: 4px solid #ffd54f;
+        padding: 14px 18px;
+        border-radius: 6px;
+        flex: 1 1 180px;
+        min-width: 140px;
+        font-size: 1em;
+        color: #795548;
+      }
+      /* Hamburger styles */
+      .navbar-toggle {
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        cursor: pointer;
+        width: 36px;
+        height: 36px;
+        margin-right: 12px;
+      }
+      .navbar-toggle span {
+        height: 4px;
+        width: 28px;
+        background: #fff;
+        margin: 4px 0;
+        border-radius: 2px;
+        transition: all 0.3s;
+        display: block;
+      }
+      @media (max-width: 700px) {
+        html {
+          font-size: 17px;
+        }
+        .container {
+          padding: 16px 6px;
+          margin: 12px auto;
+          width: 100%;
+          min-width: 0;
+          box-sizing: border-box;
+        }
+        .about-header {
+          flex-direction: column;
+          gap: 10px;
+          align-items: flex-start;
+        }
+        .services {
+          flex-direction: column;
+          gap: 14px;
+        }
+        .service-card {
+          min-width: 0;
+          font-size: 1em;
+          padding: 14px 10px;
+        }
+        .values {
+          flex-direction: column;
+          gap: 10px;
+        }
+        .navbar {
+          flex-direction: column;
+          align-items: flex-start;
+          height: auto;
+          padding: 8px 12px;
+        }
+        .navbar-toggle {
+          display: flex;
+        }
+        .navbar-links {
+          flex-direction: column;
+          width: 100%;
+          align-items: flex-start;
+          display: none;
+        }
+        .navbar-links.open {
+          display: flex;
+        }
+        .navbar a {
+          margin: 6px 0 6px 0;
+          font-size: 1em;
+        }
+        .logout-btn {
+          margin: 8px 0 0 0;
+          width: 100%;
+        }
+        h1 {
+          font-size: 1.4rem;
+        }
+        h2 {
+          font-size: 1.1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div
+        class="navbar-toggle"
+        id="navbarToggle"
+        aria-label="Toggle navigation"
+        tabindex="0"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div class="navbar-links open" id="navbarLinks">
+        <a href="/home" class="active">Home</a>
+        <a href="/buy">Buy</a>
+        <a href="/sell">Sell</a>
+        <a href="/aboutus">About Us</a>
+        <a href="/contact">Contact Us</a>
+        <% if (isLoggedIn) { %>
+        <a href="/profile">Profile</a>
+        <% } %>
+      </div>
+      <form
+        action="<%= isLoggedIn ? '/logout' : '/login' %>"
+        method="get"
+        style="margin: 0"
+      >
+        <button type="submit" class="logout-btn">
+          <%= isLoggedIn ? 'Logout' : 'Login' %>
+        </button>
+      </form>
+    </nav>
+    <div class="container">
+      <div class="about-header">
+        <img
+          src="https://img.icons8.com/color/96/000000/tractor.png"
+          alt="FPO Logo"
+        />
+        <h1>Sugam Uday Krishi Haat</h1>
+      </div>
+      <p>
+        <%= isLoggedIn? user.name:'Guest'%>, Sugam Uday Krishi Haat (Sukh) is a collective of passionate farmers,
+        working together to empower rural communities, improve agricultural
+        practices, and ensure fair returns for our members. We believe in
+        sustainable farming, innovation, and building a better future for Indian
+        agriculture.
+      </p>
+      <div class="mission">
+        <strong>Our Mission:</strong> To unite farmers, enhance productivity,
+        and provide direct market access, ensuring prosperity and dignity for
+        every member.
+      </div>
+      <h2>What We Do</h2>
+      <div class="services">
+        <div class="service-card">
+          <strong>Agri-Input Supply</strong>
+          <ul>
+            <li>Quality seeds & fertilizers</li>
+            <li>Affordable farm equipment</li>
+            <li>Expert guidance</li>
+          </ul>
+        </div>
+        <div class="service-card">
+          <strong>Collective Marketing</strong>
+          <ul>
+            <li>Direct market linkage</li>
+            <li>Better price realization</li>
+            <li>Transparent transactions</li>
+          </ul>
+        </div>
+        <div class="service-card">
+          <strong>Training & Support</strong>
+          <ul>
+            <li>Modern farming techniques</li>
+            <li>Workshops & field visits</li>
+            <li>Financial literacy</li>
+          </ul>
+        </div>
+        <div class="service-card">
+          <strong>Value Addition</strong>
+          <ul>
+            <li>Processing & packaging</li>
+            <li>Branding local produce</li>
+            <li>Agro-based entrepreneurship</li>
+          </ul>
+        </div>
+      </div>
+      <h2>Our Values</h2>
+      <div class="values">
+        <div class="value-item">Transparency & Trust</div>
+        <div class="value-item">Sustainable Agriculture</div>
+        <div class="value-item">Community Empowerment</div>
+        <div class="value-item">Innovation & Growth</div>
+      </div>
+      <h2>Contact Us</h2>
+      <p>
+        Want to join us or know more?
+        <a href="/contact" style="color: #388e3c; text-decoration: underline"
+          >Contact our team</a
+        >
+        or visit our office at GreenFields FPO, Village Road, District Center.
+      </p>
+    </div>
+    <script>
+      // Hamburger toggle logic
+      const toggle = document.getElementById("navbarToggle");
+      const links = document.getElementById("navbarLinks");
+      function toggleNav() {
+        links.classList.toggle("open");
+      }
+      toggle.addEventListener("click", toggleNav);
+      toggle.addEventListener("keypress", function (e) {
+        if (e.key === "Enter" || e.key === " ") toggleNav();
+      });
+      // Ensure nav is open by default on load (for mobile)
+      function checkWidth() {
+        if (window.innerWidth <= 700) {
+          links.classList.add("open");
+        } else {
+          links.classList.remove("open");
+        }
+      }
+      window.addEventListener("resize", checkWidth);
+      window.addEventListener("DOMContentLoaded", checkWidth);
+    </script>
+  </body>
+</html>

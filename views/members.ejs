@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Our Members | FPO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f8f9fa;
+        margin: 0;
+      }
+      .container {
+        max-width: 900px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 32px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+      }
+      h1 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 24px;
+      }
+      .members-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        justify-content: center;
+      }
+      .member-card {
+        background: #eaf6f6;
+        border-radius: 6px;
+        padding: 20px;
+        width: 220px;
+        box-shadow: 0 1px 4px rgba(44, 62, 80, 0.08);
+      }
+      .member-name {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #2980b9;
+      }
+      .member-role {
+        color: #16a085;
+        margin-bottom: 8px;
+      }
+      .member-contact {
+        font-size: 0.95em;
+        color: #555;
+      }
+      .navbar {
+        background: #2980b9;
+        padding: 12px 0;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        border-bottom: 1px solid #eaf6f6;
+      }
+      .navbar a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 18px;
+        font-weight: 500;
+        font-size: 1em;
+        transition: color 0.2s;
+      }
+      .navbar a:hover {
+        color: #f1c40f;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="/login">Login</a>
+      <a href="/signup">Sign Up</a>
+    </nav>
+    <div class="container">
+      <h1>Our Members</h1>
+      <div class="members-list">
+        <% const members = [ { name: "Vinayak Patil", role: "Chairman", email:
+        "vinayak@example.com", phone: "9876543210" }, { name: "Asha Deshmukh",
+        role: "Secretary", email: "asha@example.com", phone: "9123456780" }, {
+        name: "Ravi Shinde", role: "Treasurer", email: "ravi@example.com",
+        phone: "9988776655" }, { name: "Meera Kulkarni", role: "Member", email:
+        "meera@example.com", phone: "9001122334" }, { name: "Suresh Pawar",
+        role: "Member", email: "suresh@example.com", phone: "9011223344" } ]; %>
+        <% members.forEach(function(member) { %>
+        <div class="member-card">
+          <div class="member-name"><%= member.name %></div>
+          <div class="member-role"><%= member.role %></div>
+          <div class="member-contact">
+            <div>Email: <%= member.email %></div>
+            <div>Phone: <%= member.phone %></div>
+          </div>
+        </div>
+        <% }); %>
+      </div>
+    </div>
+  </body>
+</html>

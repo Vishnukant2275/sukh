@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Our Services</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f7f7f7; }
+    .navbar {
+      background: #2a4d8f;
+      padding: 16px 0;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .navbar a {
+      color: #fff;
+      text-decoration: none;
+      margin: 0 18px;
+      font-weight: 500;
+      padding: 8px 18px;
+      border-radius: 4px;
+      transition: background 0.2s;
+    }
+    .navbar a:hover {
+      background: #1b355e;
+    }
+    .container { max-width: 900px; margin: 40px auto; background: #fff; padding: 32px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.07);}
+    h1 { text-align: center; color: #333; margin-bottom: 32px;}
+    .services-list { display: flex; flex-wrap: wrap; gap: 24px; justify-content: center;}
+    .service-card { background: #f0f4fa; border-radius: 6px; padding: 24px; width: 260px; box-shadow: 0 1px 4px rgba(0,0,0,0.04);}
+    .service-card h2 { font-size: 1.2em; margin: 0 0 12px 0; color: #2a4d8f;}
+    .service-card p { margin: 0; color: #555;}
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/login">Login</a>
+    <a href="/signup">Sign Up</a>
+  </nav>
+  <div class="container">
+    <h1>Our Services</h1>
+    <div class="services-list">
+      <div class="service-card">
+        <h2>Web Development</h2>
+        <p>Custom websites and web applications tailored to your business needs.</p>
+      </div>
+      <div class="service-card">
+        <h2>Mobile App Development</h2>
+        <p>Native and cross-platform mobile solutions for iOS and Android.</p>
+      </div>
+      <div class="service-card">
+        <h2>UI/UX Design</h2>
+        <p>Modern, user-friendly interfaces and experiences for your digital products.</p>
+      </div>
+      <div class="service-card">
+        <h2>Cloud Solutions</h2>
+        <p>Scalable cloud infrastructure and migration services for your business.</p>
+      </div>
+      <div class="service-card">
+        <h2>Digital Marketing</h2>
+        <p>SEO, social media, and online advertising to grow your brand presence.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

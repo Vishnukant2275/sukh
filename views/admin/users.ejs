@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Management</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <style>
+      /* Base styles */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #f4f6f8;
+        padding: 20px;
+      }
+
+      .page-header {
+        margin-bottom: 2rem;
+        color: #2c3e50;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 600px;
+      }
+
+      th {
+        background: #f8f9fa;
+        padding: 1rem;
+        text-align: left;
+        font-weight: 600;
+        color: #2c3e50;
+        white-space: nowrap;
+      }
+
+      td {
+        padding: 1rem;
+        border-top: 1px solid #eee;
+        vertical-align: middle;
+      }
+
+      .user-role {
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        display: inline-block;
+      }
+
+      .role-admin {
+        background: #e3f2fd;
+        color: #1976d2;
+      }
+
+      .role-user {
+        background: #e8f5e9;
+        color: #2e7d32;
+      }
+
+      .btn {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.875rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .btn-danger {
+        background: #dc3545;
+        color: white;
+      }
+
+      .btn-danger:hover {
+        background: #c82333;
+        transform: translateY(-1px);
+      }
+
+      /* Search and filter section */
+      .tools-section {
+        margin-bottom: 1.5rem;
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .search-box {
+        flex: 1;
+        min-width: 200px;
+        position: relative;
+      }
+
+      .search-input {
+        width: 100%;
+        padding: 0.7rem 1rem 0.7rem 2.5rem;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 0.9rem;
+      }
+
+      .search-icon {
+        position: absolute;
+        left: 0.8rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #666;
+      }
+
+      /* Responsive styles */
+      @media screen and (max-width: 768px) {
+        body {
+          padding: 10px;
+        }
+
+        .page-header {
+          font-size: 1.5rem;
+        }
+
+        .tools-section {
+          flex-direction: column;
+        }
+
+        .search-box {
+          width: 100%;
+        }
+
+        td,
+        th {
+          padding: 0.8rem;
+        }
+
+        .user-role {
+          padding: 0.2rem 0.6rem;
+          font-size: 0.8rem;
+        }
+      }
+
+      @media screen and (max-width: 480px) {
+        .btn {
+          padding: 0.4rem 0.8rem;
+          font-size: 0.8rem;
+        }
+
+        td:nth-child(3), /* Phone column */
+            th:nth-child(3) {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1 class="page-header"><i class="fas fa-users"></i> User Management</h1>
+
+    <div class="tools-section">
+      <div class="search-box">
+        <i class="fas fa-search search-icon"></i>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Search users..."
+          id="searchInput"
+        />
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Role</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% users.forEach(user => { %>
+            <tr>
+              <td><%= user.name %></td>
+              <td><%= user.email %></td>
+              <td><%= user.phone %></td>
+              <td>
+                <span
+                  class="user-role <%= user.isAdmin ? 'role-admin' : 'role-user' %>"
+                >
+                  <%= user.isAdmin ? 'Admin' : 'User' %>
+                </span>
+              </td>
+              <td>
+                <button
+                  class="btn btn-danger"
+                  onclick="deleteUser('<%= user._id %>')"
+                >
+                  <i class="fas fa-trash"></i>
+                  <span class="btn-text">Delete</span>
+                </button>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <script>
+      // Search functionality
+      const searchInput = document.getElementById("searchInput");
+      searchInput.addEventListener("input", function () {
+        const searchTerm = this.value.toLowerCase();
+        const rows = document.querySelectorAll("tbody tr");
+
+        rows.forEach((row) => {
+          const text = row.textContent.toLowerCase();
+          row.style.display = text.includes(searchTerm) ? "" : "none";
+        });
+      });
+
+      // Delete user function
+      async function deleteUser(userId) {
+        if (!confirm("Are you sure you want to delete this user?")) return;
+
+        try {
+          const response = await fetch(`/admin/delete-user?id=${userId}`, {
+            method: "DELETE",
+          });
+
+          if (response.ok) {
+            console.log("User deleted successfully");
+
+            // Remove row from table dynamically
+            const row = document
+              .querySelector(`button[onclick="deleteUser('${userId}')"]`)
+              .closest("tr");
+            if (row) row.remove();
+          } else {
+            console.log("Failed to delete user:", response.status);
+          }
+        } catch (err) {
+          console.log("Error while deleting user:", err);
+        }
+      }
+    </script>
+  </body>
+</html>

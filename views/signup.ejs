@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>FPO Signup</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f8;
+        margin: 0;
+      }
+      .container {
+        max-width: 400px;
+        margin: 50px auto;
+        background: #fff;
+        padding: 32px 24px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+      h2 {
+        text-align: center;
+        margin-bottom: 24px;
+        color: #2e7d32;
+      }
+      .form-group {
+        margin-bottom: 16px;
+      }
+      label {
+        display: block;
+        margin-bottom: 6px;
+        color: #333;
+      }
+      input[type="text"],
+      input[type="email"],
+      input[type="password"],
+      input[type="tel"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+      button,
+      .google-btn {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      .signup-btn {
+        background: #388e3c;
+        color: #fff;
+        margin-bottom: 12px;
+      }
+      .google-btn {
+        background: #fff;
+        color: #444;
+        border: 1px solid #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .google-btn img {
+        height: 20px;
+        margin-right: 8px;
+      }
+      .login-link {
+        text-align: center;
+        margin-top: 16px;
+      }
+      .login-link a {
+        color: #388e3c;
+        text-decoration: none;
+      }
+      .login-link a:hover {
+        text-decoration: underline;
+      }
+      .error-message {
+        background: #ffeaea;
+        color: #d8000c;
+        border: 1px solid #d8000c;
+        border-radius: 6px;
+        padding: 0.75em 1em;
+        margin-bottom: 18px;
+        font-size: 1.05em;
+        font-weight: 500;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Signup for Sukh</h2>
+      <% if (typeof error !== 'undefined' && error) { %>
+      <div class="error-message"><%= error %></div>
+      <% } %>
+      <form action="/signup" method="POST">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            required
+            autocomplete="name"
+          />
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone Number</label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            pattern="[0-9]{10}"
+            required
+            placeholder="10-digit mobile number"
+            autocomplete="tel"
+          />
+        </div>
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            autocomplete="email"
+          />
+          <button
+            type="button"
+            id="sendOtpBtn"
+            class="google-btn"
+            style="margin-top: 8px"
+          >
+            Send OTP
+          </button>
+        </div>
+        <div class="form-group" id="otpSection" style="display: none">
+          <label for="otp">Enter OTP</label>
+          <input
+            type="text"
+            id="otp"
+            name="otp"
+            maxlength="6"
+            pattern="\d{6}"
+            autocomplete="one-time-code"
+            placeholder="6-digit OTP"
+            style="letter-spacing: 0.3em"
+          />
+
+          <button
+            type="button"
+            id="verifyOtpBtn"
+            class="signup-btn"
+            style="margin-top: 8px"
+          >
+            Verify OTP
+          </button>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            required
+            autocomplete="new-password"
+          />
+        </div>
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            name="confirmPassword"
+            required
+            autocomplete="new-password"
+          />
+        </div>
+
+        <button type="submit" class="signup-btn">Sign Up</button>
+      </form>
+
+      <div class="login-link">
+        Already registered? <a href="/login">Login here</a>
+      </div>
+    </div>
+    <script>
+      document.getElementById("sendOtpBtn").onclick = async function () {
+        const email = document.getElementById("email").value;
+        if (!email) return alert("Enter email");
+
+        const btn = document.getElementById("sendOtpBtn");
+        btn.innerText = "Sending OTP...";
+        btn.disabled = true;
+
+        try {
+          const res = await fetch(
+            `/sendOtp?email=${encodeURIComponent(email)}`
+          );
+          const data = await res.json();
+
+          if (data.success) {
+            document.getElementById("otpSection").style.display = "block";
+
+            let countdown = 30; // 30 sec timer
+            btn.disabled = true;
+            btn.innerText = `Resend OTP (${countdown}s)`;
+
+            const interval = setInterval(() => {
+              countdown--;
+              if (countdown > 0) {
+                btn.innerText = `Resend OTP (${countdown}s)`;
+              } else {
+                clearInterval(interval);
+                btn.innerText = "Resend OTP";
+                btn.disabled = false; // enable after 30s
+              }
+            }, 1000);
+          } else {
+            alert(data.message);
+            btn.innerText = "Send OTP";
+            btn.disabled = false;
+          }
+        } catch (err) {
+          console.error(err);
+          alert("Something went wrong");
+          btn.innerText = "Send OTP";
+          btn.disabled = false;
+        }
+      };
+
+      document.getElementById("verifyOtpBtn").onclick = async function () {
+        const email = document.getElementById("email").value;
+        const otp = document.getElementById("otp").value;
+        if (!email || !otp) {
+          alert("Please enter both email and OTP.");
+          return;
+        }
+
+        const btn = document.getElementById("verifyOtpBtn");
+        btn.innerText = "Verifying...";
+        btn.disabled = true;
+
+        try {
+          const res = await fetch("/verifyOtp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, otp }),
+          });
+
+          const data = await res.json();
+
+          if (data.success) {
+            // Hide OTP section & resend button
+            document.getElementById("otpSection").style.display = "none";
+            document.getElementById("sendOtpBtn").style.display = "none";
+
+            // Show green success text under email
+            const emailGroup = document.getElementById("email").parentNode;
+            const verifiedMsg = document.createElement("div");
+            verifiedMsg.style.color = "green";
+            verifiedMsg.style.fontWeight = "bold";
+            verifiedMsg.style.marginTop = "6px";
+            verifiedMsg.innerText = "✅ OTP Verified";
+            emailGroup.appendChild(verifiedMsg);
+          } else {
+            alert("Invalid OTP. Please try again.");
+            btn.innerText = "Verify OTP";
+            btn.disabled = false;
+          }
+        } catch (err) {
+          console.error(err);
+          alert("Something went wrong while verifying OTP");
+          btn.innerText = "Verify OTP";
+          btn.disabled = false;
+        }
+      };
+
+      // Password confirmation validation
+      document.querySelector("form").addEventListener("submit", function (e) {
+        const password = document.getElementById("password").value;
+        const confirmPassword =
+          document.getElementById("confirmPassword").value;
+        const phone = document.getElementById("phone").value;
+        const errorDiv =
+          document.querySelector(".error-message") ||
+          document.createElement("div");
+        errorDiv.className = "error-message";
+
+        if (password !== confirmPassword) {
+          e.preventDefault();
+          errorDiv.textContent = "Passwords do not match!";
+          if (!document.querySelector(".error-message")) {
+            document
+              .querySelector("h2")
+              .insertAdjacentElement("afterend", errorDiv);
+          }
+        }
+
+        if (phone.length !== 10 || !/^\d+$/.test(phone)) {
+          e.preventDefault();
+          errorDiv.textContent = "Please enter a valid 10-digit phone number";
+          if (!document.querySelector(".error-message")) {
+            document
+              .querySelector("h2")
+              .insertAdjacentElement("afterend", errorDiv);
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

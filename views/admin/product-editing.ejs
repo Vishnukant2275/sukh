@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Product</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <style>
+      :root {
+        --primary-color: #3498db;
+        --danger-color: #e74c3c;
+        --success-color: #2ecc71;
+        --border-radius: 8px;
+        --transition: all 0.3s ease;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #f4f6f8;
+        color: #2c3e50;
+        line-height: 1.6;
+        padding: 2rem;
+      }
+
+      .content-header {
+        margin-bottom: 2rem;
+      }
+
+      .content-header h1 {
+        font-size: 2rem;
+        color: #2c3e50;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .add-product-card {
+        background: white;
+        border-radius: var(--border-radius);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: #34495e;
+      }
+
+      .form-control {
+        width: 100%;
+        padding: 0.8rem;
+        border: 2px solid #e0e0e0;
+        border-radius: var(--border-radius);
+        font-size: 1rem;
+        transition: var(--transition);
+      }
+
+      .form-control:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+      }
+
+      .current-image {
+        background: #f8f9fa;
+        padding: 1.5rem;
+        border-radius: var(--border-radius);
+        margin-bottom: 1rem;
+      }
+
+      .current-image p {
+        margin-bottom: 1rem;
+        color: #666;
+      }
+
+      .current-image img {
+        max-width: 300px;
+        height: auto;
+        border-radius: var(--border-radius);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: var(--transition);
+      }
+
+      .current-image img:hover {
+        transform: scale(1.02);
+      }
+
+      .file-input-button {
+        border: 2px dashed #cbd5e0;
+        padding: 2rem;
+        border-radius: var(--border-radius);
+        text-align: center;
+        cursor: pointer;
+        transition: var(--transition);
+      }
+
+      .file-input-button:hover {
+        border-color: var(--primary-color);
+        background: rgba(52, 152, 219, 0.05);
+      }
+
+      .file-input-button i {
+        color: var(--primary-color);
+        margin-bottom: 1rem;
+      }
+
+      .file-input-button p {
+        color: #666;
+        margin-bottom: 0.5rem;
+      }
+
+      .file-input-button input[type="file"] {
+        display: none;
+      }
+
+      .buttons-group {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #eee;
+      }
+
+      .btn {
+        padding: 0.8rem 1.5rem;
+        border: none;
+        border-radius: var(--border-radius);
+        font-size: 1rem;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: var(--transition);
+      }
+
+      .btn-submit {
+        background: var(--success-color);
+        color: white;
+      }
+
+      .btn-cancel {
+        background: var(--danger-color);
+        color: white;
+      }
+
+      .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      @media (max-width: 768px) {
+        body {
+          padding: 1rem;
+        }
+
+        .content-header h1 {
+          font-size: 1.5rem;
+        }
+
+        .add-product-card {
+          padding: 1.5rem;
+        }
+
+        .buttons-group {
+          flex-direction: column;
+        }
+
+        .btn {
+          width: 100%;
+          justify-content: center;
+        }
+
+        .current-image img {
+          max-width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="content-header">
+      <h1>
+        <i class="fas fa-edit"></i>
+        Edit Product
+      </h1>
+    </div>
+
+    <div class="add-product-card">
+      <form
+        action="/admin/products/<%=product._id%>"
+        method="POST"
+        enctype="multipart/form-data"
+      >
+        <input type="hidden" name="productId" value="<%=product._id%>" />
+
+        <div class="form-group">
+          <label for="name">Product Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            class="form-control"
+            required
+            value="<%= product.name %>"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="price">Price (₹)</label>
+          <input
+            type="number"
+            id="price"
+            name="price"
+            class="form-control"
+            required
+            value="<%= product.price %>"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea
+            id="description"
+            name="description"
+            class="form-control"
+            rows="4"
+            required
+          >
+<%= product.description %></textarea
+          >
+        </div>
+
+        <div class="form-group">
+          <label>Product Image</label>
+          <% if (product.image) { %>
+          <div class="current-image">
+            <p>Current Image</p>
+            <img
+              src="data:<%= product.image.contentType %>;base64,<%= product.image.data.toString('base64') %>"
+              alt="<%= product.name %>"
+              onerror="this.src='https://via.placeholder.com/300?text=No+Image'"
+            />
+          </div>
+          <% } %>
+          <label class="file-input-button" for="imageInput">
+            <i class="fas fa-cloud-upload-alt fa-2x"></i>
+            <p>Click to upload new image</p>
+            <small>or drag and drop image here</small>
+            <input
+              type="file"
+              id="imageInput"
+              name="image"
+              accept="image/*"
+              onchange="previewImage(this)"
+            />
+          </label>
+          <div id="imagePreview" class="current-image" style="display: none">
+            <p>New Image Preview</p>
+            <img id="preview" src="#" alt="Preview" />
+          </div>
+        </div>
+
+        <div class="buttons-group">
+          <button type="button" class="btn btn-cancel" onclick="history.back()">
+            <i class="fas fa-times"></i>
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="btn btn-submit"
+            onclick="updateProduct('<%= product._id %>')"
+          >
+            <i class="fas fa-save"></i>
+            Update Product
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <script>
+    
+        
+      function previewImage(input) {
+        const preview = document.getElementById("preview");
+        const previewDiv = document.getElementById("imagePreview");
+
+        if (input.files && input.files[0]) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            preview.src = e.target.result;
+            previewDiv.style.display = "block";
+          };
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+
+      // Drag and drop functionality
+      const dropZone = document.querySelector(".file-input-button");
+
+      ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+      });
+
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      ["dragenter", "dragover"].forEach((eventName) => {
+        dropZone.addEventListener(eventName, highlight, false);
+      });
+
+      ["dragleave", "drop"].forEach((eventName) => {
+        dropZone.addEventListener(eventName, unhighlight, false);
+      });
+
+      function highlight(e) {
+        dropZone.style.borderColor = "#3498db";
+        dropZone.style.backgroundColor = "rgba(52, 152, 219, 0.1)";
+      }
+
+      function unhighlight(e) {
+        dropZone.style.borderColor = "#cbd5e0";
+        dropZone.style.backgroundColor = "transparent";
+      }
+
+      dropZone.addEventListener("drop", handleDrop, false);
+
+      function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        const input = document.getElementById("imageInput");
+        input.files = files;
+        previewImage(input);
+      }
+
+      // Update product function
+      async function updateProduct(id) {
+        // values DOM से लो
+        const name = document.getElementById("name").value;
+        const price = document.getElementById("price").value;
+        const description = document.getElementById("description").value;
+        const imageInput = document.getElementById("imageInput");
+
+        // object बनाओ
+        const updatedData = {
+          name,
+          price,
+          description,
+        };
+
+        if (imageInput && imageInput.files.length > 0) {
+          updatedData.image = imageInput.files[0]; // file attach
+        }
+
+        console.log("Updating:", id, updatedData);
+
+        // अब fetch request भेजो (FormData चाहिए image upload के लिए)
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("price", price);
+        formData.append("description", description);
+        if (imageInput && imageInput.files.length > 0) {
+          formData.append("image", imageInput.files[0]);
+        }
+
+        try {
+          const res = await fetch(`/admin/editproducts/${id}`, {
+            method: "POST",
+            body: formData,
+          });
+
+          if (!res.ok) throw new Error("Failed to update product");
+
+          const data = await res.json();
+          alert("Product updated successfully!");
+          console.log(data);
+        } catch (err) {
+          console.error(err);
+         
+        }
+      }
+        document
+        .getElementById("editForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault(); // ❌ normal submit रोक दिया
+          await updateProduct("<%= product._id %>"); // ✅ custom function कॉल किया
+        });
+    </script>
+  </body>
+</html>

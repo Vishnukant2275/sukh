@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us</title>
+    <style>
+      body {
+        background: linear-gradient(135deg, #2ecc40 0%, #27ae60 100%);
+        font-family: "Segoe UI", Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+      }
+      .navbar {
+        background: #fff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        padding: 0 20px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+      .navbar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        height: 60px;
+      }
+      .navbar-left {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+      .hamburger {
+        font-size: 24px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #2ecc40;
+      }
+      .navbar ul {
+        list-style: none;
+        margin: 0;
+        padding: 10px 0 0 0;
+        display: flex;
+        flex-direction: row;
+        gap: 30px;
+        flex-wrap: wrap;
+      }
+      .navbar li {
+        display: inline;
+      }
+      .navbar a {
+        text-decoration: none;
+        color: #2ecc40;
+        font-weight: bold;
+        font-size: 1.05em;
+        transition: color 0.2s;
+        padding: 8px 12px;
+        border-radius: 4px;
+        display: block;
+      }
+      .navbar a:hover,
+      .navbar a.active {
+        background: #2ecc40;
+        color: #fff;
+      }
+      .navbar .logout-link {
+        background: #2ecc40;
+        color: #fff;
+        transition: background 0.2s, color 0.2s;
+        margin-left: auto;
+      }
+      .navbar .logout-link:hover {
+        background: #27ae38;
+        color: #fff;
+      }
+      @media (max-width: 768px) {
+        .navbar {
+          padding: 0 10px;
+        }
+        .navbar ul {
+          flex-direction: column;
+          width: 100%;
+          display: none;
+        }
+        .navbar ul.show {
+          display: flex;
+        }
+        .navbar .logout-link {
+          align-self: flex-end;
+          margin: 10px 0 0 auto;
+        }
+      }
+      .contact-container {
+        background: #fff;
+        max-width: 480px;
+        margin: 60px auto 30px auto;
+        padding: 44px 48px 36px 48px;
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(46, 204, 64, 0.18);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      h2 {
+        text-align: center;
+        color: #2ecc40;
+        margin-bottom: 12px;
+        font-size: 2.2em;
+        letter-spacing: 1.5px;
+        font-weight: 700;
+      }
+      .contact-details {
+        background: linear-gradient(90deg, #eafaf1 60%, #f8fff8 100%);
+        border-radius: 12px;
+        padding: 18px 22px;
+        margin-bottom: 28px;
+        box-shadow: 0 2px 8px rgba(46, 204, 64, 0.09);
+        font-size: 1.12em;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .contact-details strong {
+        color: #27ae60;
+      }
+      .contact-details a {
+        color: #2ecc40;
+        text-decoration: none;
+        font-weight: bold;
+        transition: color 0.2s;
+      }
+      .contact-details a:hover {
+        text-decoration: underline;
+        color: #27ae60;
+      }
+      form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      label {
+        display: block;
+        margin-bottom: 6px;
+        color: #2ecc40;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+      }
+      input,
+      textarea {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 8px;
+        border: 1.5px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 1.08em;
+        background: #f7f7f7;
+        transition: border 0.2s, box-shadow 0.2s;
+        box-shadow: 0 1px 2px rgba(46, 204, 64, 0.05);
+      }
+      input:focus,
+      textarea:focus {
+        border: 1.5px solid #2ecc40;
+        outline: none;
+        box-shadow: 0 2px 8px rgba(46, 204, 64, 0.1);
+      }
+      button {
+        width: 100%;
+        background: linear-gradient(90deg, #2ecc40 60%, #27ae60 100%);
+        color: #fff;
+        border: none;
+        padding: 15px;
+        border-radius: 6px;
+        font-size: 1.12em;
+        cursor: pointer;
+        font-weight: 700;
+        letter-spacing: 0.7px;
+        box-shadow: 0 2px 8px rgba(46, 204, 64, 0.13);
+        transition: background 0.2s, transform 0.1s;
+      }
+      button:hover {
+        background: linear-gradient(90deg, #27ae60 60%, #2ecc40 100%);
+        transform: translateY(-2px) scale(1.03);
+      }
+      .contact-footer {
+        text-align: center;
+        margin-top: 30px;
+        color: #fff;
+        font-size: 1.08em;
+        opacity: 0.9;
+        letter-spacing: 0.5px;
+        font-weight: 500;
+      }
+      @media (max-width: 600px) {
+        .contact-container {
+          max-width: 98vw;
+          padding: 20px 8vw 18px 8vw;
+        }
+        .contact-details {
+          padding: 12px 8px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAVBAR START -->
+    <nav class="navbar">
+      <div class="navbar-header">
+        <div class="navbar-left">
+          <button class="hamburger" onclick="toggleNavbar()">&#9776;</button>
+        </div>
+        <a
+          href="<% if (isLoggedIn) { %>
+  /logout<% } 
+  else { %>/login
+    <% } %>"
+          class="logout-link"
+          ><% if (isLoggedIn) { %> Logout<% } else { %>Login <% } %></a
+        >
+      </div>
+      <ul id="nav-links">
+        <li><a href="/home">Home</a></li>
+        <li><a href="/buy">Buy</a></li>
+        <li><a href="/sell">Sell</a></li>
+        <li><a href="/aboutus">About Us</a></li>
+        <li><a href="/contact" class="active">Contact Us</a></li>
+        <% if (isLoggedIn) { %>
+        <li><a href="/profile">Profile</a></li>
+      <% } %>
+      </ul>
+    </nav>
+    <!-- NAVBAR END -->
+
+    <!-- CONTACT FORM -->
+    <div class="contact-container">
+      <h2>Contact Us</h2>
+      <div class="contact-details">
+        <div>
+          <strong>Phone:</strong>
+          <a href="tel:8236823688">8236823688</a> /
+          <a href="tel:9009624039">9009624039</a>
+        </div>
+        <div>
+          <strong>Email:</strong>
+          <a href="mailto:sukhfpcl@gmail.com">sukhfpcl@gmail.com</a>
+        </div>
+      </div>
+      <form action="/contact" method="POST">
+        <label for="name">Name</label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value="<%= isLoggedIn?user.name:''%>"
+          required
+          placeholder="Your Name"
+        />
+
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value="<%= isLoggedIn?user.email:''%>"
+          required
+          placeholder="you@example.com"
+        />
+
+        <label for="message">Message</label>
+        <textarea
+          id="message"
+          name="message"
+          rows="5"
+          required
+          placeholder="Type your message here..."
+        ></textarea>
+
+        <button type="submit">Send Message</button>
+      </form>
+    </div>
+    <div class="contact-footer">
+      We value your feedback and queries. Reach out to us anytime!
+    </div>
+    <script>
+      function toggleNavbar() {
+        document.getElementById("nav-links").classList.toggle("show");
+      }
+    </script>
+  </body>
+</html>

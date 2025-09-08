@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Add Farm Post</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      body {
+        background: linear-gradient(135deg, #a8e063 0%, #56ab2f 100%);
+        font-family: "Segoe UI", Arial, sans-serif;
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .container {
+        background: rgba(255, 255, 255, 0.95);
+        padding: 2.5rem 2rem;
+        border-radius: 18px;
+        box-shadow: 0 8px 32px rgba(34, 49, 63, 0.15);
+        max-width: 400px;
+        width: 100%;
+      }
+      h1 {
+        color: #388e3c;
+        text-align: center;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+      form div {
+        margin-bottom: 1.2rem;
+      }
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #2e7d32;
+        font-weight: 500;
+      }
+      input[type="file"] {
+        border: 1px solid #c8e6c9;
+        border-radius: 6px;
+        padding: 0.5rem;
+        background: #f1f8e9;
+        width: 100%;
+      }
+      textarea {
+        width: 100%;
+        border: 1px solid #c8e6c9;
+        border-radius: 6px;
+        padding: 0.7rem;
+        background: #f1f8e9;
+        resize: vertical;
+        font-size: 1rem;
+      }
+      button[type="submit"] {
+        width: 100%;
+        background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%);
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        padding: 0.9rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.2s;
+        margin-top: 0.5rem;
+      }
+      button[type="submit"]:hover {
+        background: linear-gradient(90deg, #388e3c 0%, #43cea2 100%);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Add a New Farm Post</h1>
+      <form action="/post" method="POST" enctype="multipart/form-data">
+        <div>
+          <label for="photo">Farm Photo</label>
+          <input
+            type="file"
+            id="photo"
+            name="photo"
+            accept="image/*"
+            required
+          />
+        </div>
+        <div>
+          <label for="description">Description</label>
+          <textarea
+            id="description"
+            name="description"
+            rows="5"
+            placeholder="Describe your post..."
+            required
+          ></textarea>
+        </div>
+        <button type="/post">Submit Post</button>
+      </form>
+    </div>
+  </body>
+</html>
