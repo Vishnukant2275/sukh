@@ -3,12 +3,13 @@ const Otp = require("../models/otp");
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  service: "Gmail",
   auth: {
-    user: "nodemailer.yourservice@gmail.com", // Your Gmail
-    pass: "fckl oanw fznk aetq", // App Password (16 characters)
+    user: process.env.EMAIL_USER, // set on Railway
+    pass: process.env.EMAIL_PASS, // Gmail app password
   },
 });
+
 exports.sendMail = async () => {
   try {
     let info = await transporter.sendMail({
@@ -64,44 +65,22 @@ exports.sendMailAfterContactUs = async (to, name, message) => {
 };
 
 exports.sendOtpMail = async (to) => {
-  try {
-    const otpCode = Math.floor(100000 + Math.random() * 900000).toString(); // 6 digit OTP
-    const otpEntry = new Otp({ email: to, otp: otpCode });
-    await otpEntry.save();
+  const otpCode = Math.floor(100000 + Math.random() * 900000).toString(); // 6 digit OTP
+  const otpEntry = new Otp({ email: to, otp: otpCode });
+  await otpEntry.save();
 
-    let info = await transporter.sendMail({
-      from: '"Sukh - FPO Portal" <nodemailer.yourservice@gmail.com>',
-      to: to,
-      subject: `Your OTP for Signup - ${otpCode}`,
-      text: `Your OTP is: ${otpCode}. Do not share it with anyone.`,
-      html: ` <div style="font-family: Arial, sans-serif; background:#f4f6f8; padding:20px; text-align:center;">
-          <div style="max-width:500px; margin:0 auto; background:#fff; border-radius:8px; padding:30px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
-            <h2 style="color:#2e7d32; margin-bottom:16px;">Welcome to Sukh Portal</h2>
-            <p style="font-size:16px; color:#333; margin-bottom:20px;">
-              Use the following OTP to complete your signup. This OTP is valid for the next <b>5 minutes</b>.
-            </p>
-            <div style="font-size:28px; font-weight:bold; letter-spacing:6px; color:#2e7d32; margin:20px 0;">
-              ${otpCode}
-            </div>
-            <p style="font-size:14px; color:#555; margin-bottom:24px;">
-              ⚠️ Do not share this OTP with anyone for your account safety.
-            </p>
-            <a href="#" style="display:inline-block; background:#2e7d32; color:#fff; padding:10px 20px; border-radius:4px; text-decoration:none; font-size:16px;">
-              Verify Now
-            </a>
-            <hr style="margin:30px 0; border:none; border-top:1px solid #eee;" />
-            <p style="font-size:12px; color:#999;">
-              If you didn’t request this, please ignore this email.  
-              <br/>© ${new Date().getFullYear()} FPO Portal. All rights reserved.
-            </p>
-          </div>
-        </div>
-      `,
-    });
-  } catch (err) {
-    console.error("Error sending email:", err);
-  }
+  const info = await transporter.sendMail({
+    from: `"Sukh - FPO Portal" <${process.env.EMAIL_USER}>`,
+    to,
+    subject: `Your OTP for Signup - ${otpCode}`,
+    text: `Your OTP is: ${otpCode}. Do not share it with anyone.`,
+    html: `...`, // keep your HTML
+  });
+
+  console.log("OTP sent:", info.messageId);
+  return otpCode; // optionally return OTP for testing
 };
+
 
 const User = require("../models/User");
 exports.sendPasswordMail = async (to) => {

@@ -6,7 +6,6 @@ const app = express();
 const multer = require("multer");
 require("dotenv").config();
 
-
 // Disk storage ki jagah memory storage use karna
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -119,14 +118,15 @@ app.get("/", checkLoggedIn, (req, res) => {
 // Navigation Routes
 app.get("/buy", isLoggedIn, navController.buy);
 // controller
-app.get("/product/:id",isLoggedIn, navController.productDetails);
-app.get("/purchase/:id",isLoggedIn, navController.purchasePage);
-app.post("/purchase/:id",isLoggedIn, navController.handlePurchase);
-
+app.get("/product/:id", isLoggedIn, navController.productDetails);
+app.get("/purchase/:id", isLoggedIn, navController.purchasePage);
+app.post("/purchase/:id", isLoggedIn, navController.handlePurchase);
 
 app.get("/payment/:orderId", async (req, res) => {
   try {
-    const order = await Order.findById(req.params.orderId).populate("productId");
+    const order = await Order.findById(req.params.orderId).populate(
+      "productId"
+    );
 
     const amount = order.quantity * order.productId.price;
 
@@ -147,7 +147,6 @@ app.get("/payment/:orderId", async (req, res) => {
     res.status(500).send("Error generating payment page");
   }
 });
-
 
 app.get("/sell", isLoggedIn, navController.sell);
 app.post("/sell", isLoggedIn, navController.afterSell);
@@ -212,23 +211,31 @@ app.get("/admin/users", isAdmin, adminController.users);
 app.delete("/admin/delete-user", isAdmin, adminController.deleteUser);
 app.delete("/admin/delete-product", isAdmin, adminController.deleteProduct);
 app.get("/admin/profile", isAdmin, adminController.adminProfile);
-const Order= require("./models/orders")
+const Order = require("./models/orders");
 app.get("/admin/orders/pending", async (req, res) => {
-  const orders = await Order.find({ status: "PendingPaymentStatus" }).populate("productId");
+  const orders = await Order.find({ status: "PendingPaymentStatus" }).populate(
+    "productId"
+  );
   res.render("admin/orders", { orders });
 });
 app.get("/admin/orders/shipment", async (req, res) => {
-  const orders = await Order.find({ status: "PendingForShipment" }).populate("productId");
+  const orders = await Order.find({ status: "PendingForShipment" }).populate(
+    "productId"
+  );
   res.render("admin/shipment", { orders });
 });
 
 app.post("/admin/orders/:id/approve", async (req, res) => {
-  await Order.findByIdAndUpdate(req.params.id, { status: "PendingForShipment" });
+  await Order.findByIdAndUpdate(req.params.id, {
+    status: "PendingForShipment",
+  });
   res.redirect("/admin/orders/pending");
 });
 
 app.post("/admin/orders/:id/reject", async (req, res) => {
-  await Order.findByIdAndUpdate(req.params.id, { status: "PaymentNotReceived" }); // ya phir status=Rejected bhi kar sakte ho
+  await Order.findByIdAndUpdate(req.params.id, {
+    status: "PaymentNotReceived",
+  }); // ya phir status=Rejected bhi kar sakte ho
   res.redirect("/admin/orders/pending");
 });
 
