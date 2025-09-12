@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title><%= product.name %> - Details</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    />
+    <style>
+      body {
+        background: #f8fafc;
+      }
+      .product-image {
+        max-height: 400px;
+        object-fit: cover;
+        border-radius: 12px;
+      }
+      .price-tag {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #198754;
+      }
+      .rating {
+        color: #ffc107;
+        font-size: 1.2rem;
+      }
+      .spec-table th {
+        width: 30%;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <%- include('../partials/navbar') %>
+
+    <!-- Product Details -->
+    <div class="container py-5">
+      <div class="row g-5 align-items-start">
+        <!-- Image Section -->
+        <div class="col-md-6">
+          <% if (product.image && product.image.data) { %>
+          <img
+            src="data:<%= product.image.contentType %>;base64,<%= product.image.data.toString('base64') %>"
+            class="img-fluid product-image shadow"
+            alt="<%= product.name %>"
+          />
+          <% } else { %>
+          <img
+            src="https://via.placeholder.com/500x400?text=No+Image"
+            class="img-fluid product-image shadow"
+            alt="No Image"
+          />
+          <% } %>
+        </div>
+
+        <!-- Product Info Section -->
+        <div class="col-md-6">
+          <h1 class="fw-bold text-success"><%= product.name %></h1>
+
+          <!-- Rating -->
+          <p class="rating">
+            ⭐⭐⭐⭐☆ (4.2/5) | 230 Reviews
+          </p>
+
+          <!-- Price -->
+          <p class="price-tag mb-2">₹<%= product.price %></p>
+          <p class="text-danger fw-bold">Extra 10% off on UPI Payment</p>
+
+          <!-- Offers -->
+          <div class="mb-3">
+            <h5>Available Offers</h5>
+            <ul>
+              <li>Bank Offer: 5% Unlimited Cashback on Flipkart Axis Bank Card</li>
+              <li>Special Price: Get extra 10% off (price inclusive of discount)</li>
+              <li>Partner Offer: Sign up for Flipkart Pay Later and get ₹100 Gift Card</li>
+            </ul>
+          </div>
+
+          <!-- Buttons -->
+          <div class="d-flex gap-3 mb-4">
+            <button class="btn btn-outline-success btn-lg">
+              <i class="bi bi-cart-plus"></i> Add to Cart
+            </button>
+            <button class="btn btn-success btn-lg">
+              <i class="bi bi-bag-check"></i> Buy Now
+            </button>
+          </div>
+
+          <!-- Delivery Info -->
+          <div class="mb-4">
+            <h6>Delivery</h6>
+            <form class="d-flex gap-2">
+              <input type="text" class="form-control" placeholder="Enter Pincode" />
+              <button class="btn btn-outline-secondary">Check</button>
+            </form>
+            <p class="text-muted mt-2">Delivery by <b>3-5 days</b></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Highlights -->
+      <div class="mt-5">
+        <h3>Highlights</h3>
+        <ul>
+          <li>High-quality raw material</li>
+          <li>Eco-friendly & sustainable</li>
+          <li>Available in bulk</li>
+          <li>Trusted seller verified</li>
+        </ul>
+      </div>
+
+      <!-- Specifications -->
+      <div class="mt-5">
+        <h3>Specifications</h3>
+        <table class="table table-bordered spec-table">
+          <tr>
+            <th>Type</th>
+            <td><%= product.RawMaterialType || "N/A" %></td>
+          </tr>
+          <tr>
+            <th>Quantity</th>
+            <td><%= product.quantity %> Kg</td>
+          </tr>
+          <tr>
+            <th>Location</th>
+            <td><%= product.location %></td>
+          </tr>
+          <tr>
+            <th>Contact</th>
+            <td><%= product.ContactNumber %></td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Seller Info -->
+      <div class="mt-5">
+        <h3>Seller Information</h3>
+        <p><strong>Seller:</strong> <%= product.sellerName || "Verified Seller" %></p>
+        <p><strong>Rating:</strong> ⭐⭐⭐⭐☆ (4.5)</p>
+        <p><strong>Contact:</strong> <%= product.ContactNumber %></p>
+      </div>
+
+      <!-- Customer Reviews -->
+      <div class="mt-5">
+        <h3>Customer Reviews</h3>
+        <div class="border p-3 rounded mb-3">
+          <p class="fw-bold mb-1">Ravi Sharma</p>
+          <p class="rating">⭐⭐⭐⭐⭐</p>
+          <p>Very good product, quality is excellent. Worth the price!</p>
+        </div>
+        <div class="border p-3 rounded mb-3">
+          <p class="fw-bold mb-1">Anjali Verma</p>
+          <p class="rating">⭐⭐⭐⭐</p>
+          <p>Good but delivery was delayed by 2 days.</p>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

@@ -1,0 +1,330 @@
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+/>
+<style>
+  :root {
+    --primary-color: #4a90e2;
+    --secondary-color: #2c3e50;
+    --success-color: #27ae60;
+    --warning-color: #f39c12;
+    --danger-color: #e74c3c;
+    --light-bg: #f8f9fa;
+    --border-radius: 10px;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: "Segoe UI", sans-serif;
+    display: flex;
+    background: var(--light-bg);
+    min-height: 100vh;
+  }
+
+  .sidebar {
+    width: 280px;
+    background: var(--secondary-color);
+    padding: 2rem;
+    color: white;
+    position: fixed;
+    height: 100vh;
+    transition: all 0.3s ease;
+  }
+
+  .sidebar h2 {
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .nav-item {
+    margin: 0.8rem 0;
+  }
+
+  .sidebar a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    border-radius: var(--border-radius);
+    transition: all 0.3s ease;
+  }
+
+  .sidebar a:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    transform: translateX(5px);
+  }
+
+  .sidebar a i {
+    margin-right: 10px;
+    width: 20px;
+  }
+
+  .content {
+    flex: 1;
+    margin-left: 280px;
+    padding: 2rem;
+  }
+
+  .page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+
+  .page-header h1 {
+    font-size: 2rem;
+    color: var(--secondary-color);
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    transition: transform 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .stat-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .stat-card h3 {
+    color: var(--secondary-color);
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .stat-card h3 i {
+    margin-right: 10px;
+    opacity: 0.7;
+  }
+
+  .stat-card .number {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--primary-color);
+  }
+
+  .stat-card.users .number {
+    color: var(--primary-color);
+  }
+  .stat-card.products .number {
+    color: var(--success-color);
+  }
+  .stat-card.requests .number {
+    color: var(--warning-color);
+  }
+  .stat-card.queries .number {
+    color: var(--danger-color);
+  }
+
+  .quick-actions {
+    background: white;
+    border-radius: var(--border-radius);
+    padding: 1.5rem;
+    margin-top: 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+  }
+
+  .quick-actions h2 {
+    margin-bottom: 1rem;
+    color: var(--secondary-color);
+  }
+
+  .actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+
+  .action-btn {
+    padding: 1rem;
+    border: none;
+    border-radius: var(--border-radius);
+    background: var(--light-bg);
+    color: var(--secondary-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    display: flex;
+    align-items: center;
+  }
+
+  .action-btn:hover {
+    background: var(--primary-color);
+    color: white;
+  }
+
+  .action-btn i {
+    margin-right: 10px;
+  }
+
+  /* Add these media queries after existing styles */
+  @media screen and (max-width: 768px) {
+    body {
+      flex-direction: column;
+    }
+
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: fixed;
+      padding: 1rem;
+      transform: translateY(-100%);
+      z-index: 1000;
+    }
+
+    .sidebar.active {
+      transform: translateY(0);
+    }
+
+    .sidebar h2 {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+
+    .nav-item {
+      margin: 0.4rem 0;
+    }
+
+    .content {
+      margin-left: 0;
+      padding: 1rem;
+      padding-top: 70px; /* Space for hamburger */
+    }
+
+    .hamburger-menu {
+      display: block;
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+      z-index: 1001;
+      background: var(--secondary-color);
+      color: white;
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .page-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .page-header h1 {
+      font-size: 1.5rem;
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .stat-card {
+      padding: 1rem;
+    }
+
+    .stat-card .number {
+      font-size: 1.5rem;
+    }
+
+    .actions-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .action-btn {
+      padding: 0.8rem;
+      font-size: 0.9rem;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .stat-card h3 {
+      font-size: 1rem;
+    }
+
+    #currentDate {
+      font-size: 0.9rem;
+    }
+
+    .quick-actions {
+      padding: 1rem;
+    }
+  }
+</style>
+
+<div class="sidebar">
+  <h2><i class="fas fa-shield-alt"></i> Admin Panel</h2>
+  <nav>
+    <div class="nav-item">
+      <a href="/admin/dashboard" class="active">
+        <i class="fas fa-home"></i> Dashboard
+      </a>
+    </div>
+    <div class="nav-item">
+      <a href="/admin/products"> <i class="fas fa-box"></i> Products </a>
+    </div>
+    <div class="nav-item">
+      <a href="/admin/sell-requests">
+        <i class="fas fa-shopping-cart"></i> Sell Requests
+      </a>
+    </div>
+    <div class="nav-item">
+      <a href="/admin/orders/pending">
+        <i class="fa-solid fa-bag-shopping"></i> Pending Orders
+      </a>
+    </div>
+    <div class="nav-item">
+      <a href="/admin/orders/shipment">
+        <i class="fa-solid fa-truck"></i> Pending Shipment
+      </a>
+    </div>
+    <div class="nav-item">
+      <a href="/admin/queries">
+        <i class="fas fa-question-circle"></i> Queries
+      </a>
+    </div>
+    <div class="nav-item">
+      <a href="/admin/posts">
+        <i class="fas fa-comments"></i> Community Posts
+      </a>
+    </div>
+    <div class="nav-item">
+      <a href="/admin/users"> <i class="fas fa-users"></i> Users </a>
+    </div>
+    <div class="nav-item">
+      <a href="/logout"> <i class="fas fa-sign-out-alt"></i> Logout </a>
+    </div>
+  </nav>
+</div>

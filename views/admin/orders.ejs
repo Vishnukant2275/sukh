@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin | Pending Orders</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: #f8f9fa;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .card {
+        border-radius: 1rem;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+      }
+      .order-status {
+        font-weight: bold;
+        color: #ffc107;
+      }
+      .btn-approve {
+        background: #28a745;
+        color: #fff;
+        font-weight: 500;
+      }
+      .btn-reject {
+        background: #dc3545;
+        color: #fff;
+        font-weight: 500;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('../../partials/adminNavbar') %>
+    <div class="container py-5">
+      <h2 class="text-center mb-4 text-primary">📦 Pending Orders</h2>
+
+      <% if (orders.length === 0) { %>
+      <div class="alert alert-success text-center">
+        ✅ No pending orders right now!
+      </div>
+      <% } else { %>
+      <div class="card p-3">
+        <div class="table-responsive">
+          <table class="table align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th>#</th>
+                <th>Customer</th>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Total</th>
+                <th>Mobile</th>
+                <th>Address</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% orders.forEach((order, index) => { %>
+              <tr>
+                <td><%= index + 1 %></td>
+                <td><strong><%= order.name %></strong></td>
+                <td><%= order.productId ? order.productId.name : "N/A" %></td>
+                <td><%= order.quantity %></td>
+                <td class="text-success fw-bold">
+                  ₹ <%= order.productId ? order.productId.price * order.quantity
+                  : 0 %>
+                </td>
+                <td><%= order.mobile %></td>
+                <td>
+                  <small>
+                    <%= order.address.address %>, <%= order.address.locality %>,
+                    <%= order.address.city %>, <%= order.address.state %> - <%=
+                    order.address.pin %>
+                  </small>
+                </td>
+                <td class="order-status"><%= order.status %></td>
+                <td>
+                  <div class="d-flex gap-2">
+                    <form
+                      action="/admin/orders/<%= order._id %>/approve"
+                      method="POST"
+                    >
+                      <button class="btn btn-approve btn-sm">
+                        Payment Recieved
+                      </button>
+                    </form>
+                    <form
+                      action="/admin/orders/<%= order._id %>/reject"
+                      method="POST"
+                    >
+                      <button class="btn btn-reject btn-sm">
+                        Payment Not Recieved
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <% } %>
+    </div>
+  </body>
+</html>

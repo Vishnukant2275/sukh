@@ -2,17 +2,18 @@ const User = require("../models/User");
 
 async function isLoggedIn(req, res, next) {
   try {
-    // Example: agar aap cookie/session use kar rahe ho
-    if (!req.cookies.userId) {
+    // ✅ check session me userId hai ya nahi
+    if (!req.session.userId) {
       return res.redirect("/login");
     }
 
-    const user = await User.findById(req.cookies.userId);
+    const user = await User.findById(req.session.userId);
     if (!user) {
       return res.redirect("/login");
     }
 
-    req.user = user; // yahi line IMPORTANT hai
+    // ✅ attach user object to request
+    req.user = user;
     next();
   } catch (err) {
     console.error("Auth error:", err);

@@ -267,9 +267,14 @@
   </head>
   <body>
     <header>
-      <h1>Welcome <%= isLoggedIn?user.name:'Guest'%> to Sugam Uday Krishi Haat</h1>
+      <h1>
+        Welcome <%= isLoggedIn?user.name:'Guest'%> to Sugam Uday Krishi Haat
+      </h1>
       <p>Empowering Farmers. Connecting Communities.</p>
-      <button class="logout-btn" onclick="location.href=`<%= isLoggedIn?'/Logout':'/Login'%>`">
+      <button
+        class="logout-btn"
+        onclick="location.href=`<%= isLoggedIn?'/Logout':'/Login'%>`"
+      >
         <%= isLoggedIn?'Logout':'Login'%>
       </button>
     </header>
@@ -414,82 +419,38 @@
         </button>
       </div>
       <div class="community-cards">
-        <!-- Card 1 -->
+        <% posts.forEach(post => { %>
         <div class="community-card">
+          <!-- Farmer avatar -->
           <img
             class="farmer-avatar"
-            src="https://randomuser.me/api/portraits/men/32.jpg"
-            alt="Farmer Ram Singh"
+            src="<%= post.userId && post.userId.avatar ? post.userId.avatar : 'https://randomuser.me/api/portraits/lego/1.jpg' %>"
+            alt="Farmer <%= post.userId ? post.userId.name : 'Unknown' %>"
           />
-          <div class="farmer-name">Ram Singh</div>
-          <div class="post-date">June 10, 2024</div>
-          <div class="post-content">
-            Just harvested fresh organic tomatoes! Available for sale at best
-            prices. Contact me for details.
+
+          <!-- Farmer name -->
+          <div class="farmer-name">
+            <%= post.userId ? post.userId.name : 'Unknown' %>
           </div>
+
+          <!-- Post date -->
+          <div class="post-date"><%= post.createdAt.toDateString() %></div>
+
+          <!-- Post content -->
+          <div class="post-content"><%= post.description %></div>
+
+          <!-- Post image -->
+          <% if (post.image) { %>
           <img
             class="post-image"
-            src="https://img.freepik.com/free-photo/fresh-tomatoes-basket_144627-16571.jpg?w=600"
-            alt="Tomatoes"
+            src="data:<%= post.image.contentType %>;base64,<%= post.image.data.toString('base64') %>"
+            alt="Post Image"
           />
+          <% } else { %>
+          <span>No Image</span>
+          <% } %>
         </div>
-        <!-- Card 2 -->
-        <div class="community-card">
-          <img
-            class="farmer-avatar"
-            src="https://randomuser.me/api/portraits/women/44.jpg"
-            alt="Farmer Sunita Devi"
-          />
-          <div class="farmer-name">Sunita Devi</div>
-          <div class="post-date">June 9, 2024</div>
-          <div class="post-content">
-            Looking for buyers for my organic wheat crop. Ready for delivery in
-            a week.
-          </div>
-          <img
-            class="post-image"
-            src="https://img.freepik.com/free-photo/wheat-field-closeup_181624-18047.jpg?w=600"
-            alt="Wheat field"
-          />
-        </div>
-        <!-- Card 3 -->
-        <div class="community-card">
-          <img
-            class="farmer-avatar"
-            src="https://randomuser.me/api/portraits/men/54.jpg"
-            alt="Farmer Ajay Kumar"
-          />
-          <div class="farmer-name">Ajay Kumar</div>
-          <div class="post-date">June 8, 2024</div>
-          <div class="post-content">
-            Shared a new technique for water conservation in paddy fields. Let's
-            help each other grow!
-          </div>
-          <img
-            class="post-image"
-            src="https://img.freepik.com/free-photo/rice-fields-bali-indonesia_181624-12444.jpg?w=600"
-            alt="Paddy field"
-          />
-        </div>
-        <!-- Card 4 -->
-        <div class="community-card">
-          <img
-            class="farmer-avatar"
-            src="https://randomuser.me/api/portraits/women/68.jpg"
-            alt="Farmer Meena Patel"
-          />
-          <div class="farmer-name">Meena Patel</div>
-          <div class="post-date">June 7, 2024</div>
-          <div class="post-content">
-            Anyone interested in organic fertilizers? I have surplus stock this
-            season.
-          </div>
-          <img
-            class="post-image"
-            src="https://img.freepik.com/free-photo/organic-fertilizer_144627-16573.jpg?w=600"
-            alt="Organic fertilizer"
-          />
-        </div>
+        <% }) %>
       </div>
     </div>
 

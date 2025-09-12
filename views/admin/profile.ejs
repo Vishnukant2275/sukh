@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modern User Profile</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #a1ffce, #faffd1);
+        min-height: 100vh;
+      }
+
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background: #fff;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        z-index: 1000;
+      }
+
+      .navbar-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 24px;
+        flex-wrap: wrap;
+      }
+
+      .hamburger {
+        display: none;
+        font-size: 22px;
+        background: none;
+        border: none;
+        color: #38b87c;
+      }
+
+      .nav-links {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        background: #fff;
+        transition: 0.3s;
+      }
+
+      .nav-links.hide {
+        display: none;
+      }
+
+      .nav-links li {
+        list-style: none;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: #38b87c;
+        font-weight: 600;
+        padding: 14px 24px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: 0.3s;
+      }
+
+      .nav-links a:hover {
+        background: #e6fff4;
+      }
+
+      .logout-button {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 16px;
+        color: white;
+        background: #38b87c;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+      }
+
+      .logout-button:hover {
+        background: #2d9e69;
+      }
+
+      .navbar-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      @media (min-width: 768px) {
+        .hamburger {
+          display: none;
+        }
+
+        .nav-links {
+          flex-direction: row;
+          justify-content: center;
+          width: auto;
+        }
+
+        .nav-links.hide {
+          display: flex;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .hamburger {
+          display: block;
+        }
+
+        .navbar-container {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .navbar-actions {
+          align-self: flex-end;
+          margin-top: 10px;
+        }
+      }
+
+      .content-wrapper {
+        padding: 120px 16px 32px;
+        display: flex;
+        justify-content: center;
+      }
+
+      .profile-container {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        border-radius: 16px;
+        padding: 30px;
+        width: 100%;
+        max-width: 600px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      .avatar {
+        width: 100px;
+        height: 100px;
+        background: #eafff0;
+        color: #38b87c;
+        font-size: 3rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        border-radius: 50%;
+        border: 4px solid #caffdd;
+      }
+
+      h2 {
+        text-align: center;
+        color: #38b87c;
+        margin-bottom: 10px;
+      }
+
+      .profile-fields {
+        display: grid;
+        gap: 10px;
+        margin-bottom: 20px;
+        font-size: 1rem;
+        color: #333;
+      }
+
+      .profile-fields strong {
+        display: inline-block;
+        min-width: 90px;
+        color: #2e856e;
+      }
+
+      .edit-profile-container {
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      .edit-profile-btn {
+        background: #4caf50;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 25px;
+        font-size: 1rem;
+        font-family: "Poppins", sans-serif;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .edit-profile-btn:hover {
+        background: #45a049;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      .edit-profile-btn i {
+        font-size: 1.1rem;
+      }
+
+      .section-title {
+        font-weight: 600;
+        margin-top: 20px;
+        padding: 10px 14px;
+        background: #f0fff9;
+        border-radius: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: background 0.3s;
+      }
+
+      .section-title:hover {
+        background: #d2ffec;
+      }
+
+      .section-title::after {
+        content: "\f078";
+        font-family: "Font Awesome 6 Free";
+        font-weight: 900;
+        margin-left: auto;
+        transition: transform 0.3s;
+      }
+
+      .section-title.open::after {
+        transform: rotate(180deg);
+      }
+
+      .fold-content {
+        display: none;
+        animation: fadeIn 0.4s ease;
+      }
+
+      .fold-content.open {
+        display: block;
+        margin-top: 10px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th,
+      td {
+        padding: 10px;
+        border-bottom: 1px solid #e0e0e0;
+        text-align: left;
+      }
+
+      th {
+        background: #ecfff6;
+        color: #38b87c;
+      }
+
+      td {
+        color: #555;
+      }
+
+      .edit-input {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 6px 12px;
+        font-size: 0.9rem;
+        width: 200px;
+        transition: border-color 0.3s;
+      }
+
+      .edit-input:focus {
+        border-color: #38b87c;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(56, 184, 124, 0.2);
+      }
+
+      .edit-input:read-only {
+        background-color: #f5f5f5;
+        cursor: not-allowed;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- <nav class="navbar">
+      <div class="navbar-container">
+        <button class="hamburger" onclick="toggleMenu()">
+          <i class="fas fa-bars"></i>
+        </button>
+        <ul class="nav-links hide" id="navLinks">
+          <li>
+            <a href="/home"><i class="fa-solid fa-house"></i> Home</a>
+          </li>
+          <li>
+            <a href="/buy"><i class="fa-solid fa-cart-shopping"></i> Buy</a>
+          </li>
+          <li>
+            <a href="/sell"><i class="fa-solid fa-tag"></i> Sell</a>
+          </li>
+          <li>
+            <a href="/aboutus"
+              ><i class="fa-solid fa-circle-info"></i> About Us</a
+            >
+          </li>
+          <li>
+            <a href="/contact"
+              ><i class="fa-solid fa-id-badge"></i> Contact Us</a
+            >
+          </li>
+        </ul>
+        <div class="navbar-actions">
+          <a href="/logout" class="logout-button">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </a>
+        </div>
+      </div>
+    </nav> -->
+
+    <div class="content-wrapper" id="contentWrapper">
+      <div class="profile-container">
+        <div class="avatar"><i class="fa-solid fa-user"></i></div>
+        <h2><%= admin.name %></h2>
+        <div class="profile-fields">
+          <p>
+            <strong>Name:</strong>
+            <% if (isEditing) { %>
+            <input
+              type="text"
+              name="name"
+              value="<%= admin.name %>"
+              class="edit-input"
+            />
+            <% } else { %> <%= admin.name %> <% } %>
+          </p>
+          <p>
+            <strong>Role:</strong>
+            <%= admin.role %>
+          </p>
+          <p>
+            <strong>Email:</strong>
+            <% if (isEditing) { %>
+            <input
+              type="email"
+              name="email"
+              value="<%= admin.email %>"
+              class="edit-input"
+              readonly
+            />
+            <% } else { %> <%= admin.email %> <% } %>
+          </p>
+          <p>
+            <strong>Address:</strong>
+            <% if (isEditing) { %>
+            <input
+              type="text"
+              name="address"
+              value="<%= admin.address || 'India' %>"
+              class="edit-input"
+            />
+            <% } else { %> <%= admin.address || 'India' %> <% } %>
+          </p>
+          <p>
+            <strong>Phone:</strong>
+            <% if (isEditing) { %>
+            <input
+              type="tel"
+              name="phone"
+              value="<%= admin.phone %>"
+              class="edit-input"
+              pattern="[0-9]{10}"
+            />
+            <% } else { %> +91-<%= user.phone %> <% } %>
+          </p>
+        </div>
+
+        <div class="edit-profile-container">
+          <% if (isEditing) { %>
+          <form action="/profile/edit" method="post">
+            <button class="edit-profile-btn" onclick="submitForm()">
+              <i class="fa-solid fa-check"></i> Update Profile
+            </button>
+          </form>
+          <% } else { %>
+          <button
+            class="edit-profile-btn"
+            onclick="location.href='/profile/edit?isEditing=true'"
+          >
+            <i class="fa-solid fa-user-pen"></i> Edit Profile
+          </button>
+          <% } %>
+        </div>
+
+        <div class="section-title" onclick="toggleFold(this)">
+          <i class="fa-solid fa-box"></i> Order History
+        </div>
+        <div class="fold-content">
+          <table>
+            <tr>
+              <th>Order ID</th>
+              <th>Date</th>
+              <th>Item</th>
+              <th>Status</th>
+            </tr>
+            <tr>
+              <td>#1023</td>
+              <td>2024-05-12</td>
+              <td>Wireless Mouse</td>
+              <td>Delivered</td>
+            </tr>
+            <tr>
+              <td>#1018</td>
+              <td>2024-04-28</td>
+              <td>Bluetooth Speaker</td>
+              <td>Shipped</td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="section-title" onclick="toggleFold(this)">
+          <i class="fa-solid fa-dollar-sign"></i> Sell Record
+        </div>
+        <div class="fold-content">
+          <table>
+            <tr>
+              <th>Record ID</th>
+              <th>Date</th>
+              <th>Product</th>
+              <th>Amount</th>
+            </tr>
+            <tr>
+              <td>#SR-210</td>
+              <td>2024-06-01</td>
+              <td>Old Laptop</td>
+              <td>$350</td>
+            </tr>
+            <tr>
+              <td>#SR-198</td>
+              <td>2024-05-20</td>
+              <td>Headphones</td>
+              <td>$40</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const navLinks = document.getElementById("navLinks");
+
+      function toggleMenu() {
+        navLinks.classList.toggle("hide");
+      }
+
+      function toggleFold(element) {
+        element.classList.toggle("open");
+        const content = element.nextElementSibling;
+        content.classList.toggle("open");
+      }
+
+      function submitForm() {
+        const formData = {
+          name: document.querySelector('input[name="name"]').value,
+          address: document.querySelector('input[name="address"]').value,
+          phone: document.querySelector('input[name="phone"]').value,
+        };
+
+        fetch("/profile/edit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              location.href = "/profile";
+            }
+          })
+          .catch((error) => console.error("Error:", error));
+      }
+    </script>
+  </body>
+</html>

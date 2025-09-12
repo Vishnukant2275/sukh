@@ -19,7 +19,8 @@ exports.login = async (req, res) => {
     }
 
     // Step 4: Cookie me sirf userId daalna (best practice)
-    res.cookie("userId", user._id.toString(), { httpOnly: true });
+    req.session.userId = user._id.toString();
+    req.session.role = user.role;
 
     res.redirect("/home");
   } catch (err) {
@@ -28,17 +29,19 @@ exports.login = async (req, res) => {
   }
 };
 exports.logout = (req, res) => {
-  res.clearCookie("userId");
+  req.session.destroy();
   res.redirect("/home");
 };
 
 exports.signup = async (req, res) => {
-
   try {
-    const { name,phone, email, password, otp } = req.body;
+    const { name, phone, email, password, otp } = req.body;
 
-    if (!name ||!phone || !email || !password || !otp) {
-      return res.render("signup", { title: "Signup", error: "All fields are required" });
+    if (!name || !phone || !email || !password || !otp) {
+      return res.render("signup", {
+        title: "Signup",
+        error: "All fields are required",
+      });
     }
 
     // OTP verification
@@ -51,7 +54,7 @@ exports.signup = async (req, res) => {
     await Otp.deleteOne({ _id: otpEntry._id });
 
     // Create user
-    const newUser = new User({ name,phone, email, password });
+    const newUser = new User({ name, phone, email, password });
     await newUser.save();
 
     // Set cookie
@@ -60,8 +63,10 @@ exports.signup = async (req, res) => {
     res.redirect("/home");
   } catch (err) {
     console.error(err);
-    res.status(500).render("signup", { title: "Signup", error: err.errmsg || "Server Error" });
-    ;
+    res.status(500).render("signup", {
+      title: "Signup",
+      error: err.errmsg || "Server Error",
+    });
   }
 };
 
@@ -72,7 +77,9 @@ exports.sendOtpMail = async (req, res) => {
   const { email } = req.query;
 
   if (!email) {
-    return res.status(400).json({ success: false, message: "Email is required" });
+    return res
+      .status(400)
+      .json({ success: false, message: "Email is required" });
   }
 
   try {
@@ -81,14 +88,16 @@ exports.sendOtpMail = async (req, res) => {
 
     if (existingUser) {
       // Return JSON and stop function immediately
-      return res.json({ success: false, message: "User already exists, please login" });
+      return res.json({
+        success: false,
+        message: "User already exists, please login",
+      });
     }
 
     // Only send OTP if user does NOT exist
     await mailController.sendOtpMail(email);
 
     return res.json({ success: true, message: "OTP sent to " + email });
-
   } catch (err) {
     console.error("Error in sendOtpMail:", err);
     return res.status(500).json({ success: false, message: "Server error" });
@@ -98,7 +107,9 @@ exports.sendOtpMail = async (req, res) => {
 exports.verifyOtp = async (req, res) => {
   const { email, otp } = req.body;
   if (!email || !otp) {
-    return res.status(400).json({ success: false, message: "Email and OTP required" });
+    return res
+      .status(400)
+      .json({ success: false, message: "Email and OTP required" });
   }
 
   try {
@@ -108,9 +119,9 @@ exports.verifyOtp = async (req, res) => {
     }
 
     // OTP valid, delete from DB
-        return res.json({ success: true, message: "OTP verified successfully" });
+    return res.json({ success: true, message: "OTP verified successfully" });
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: "Error verifying OTP" });
   }
-}
+};

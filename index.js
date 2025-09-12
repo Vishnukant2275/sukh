@@ -9,6 +9,21 @@ const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+// Session management
+const session = require("express-session");
+
+app.use(
+  session({
+    secret: "lundlele", // kuch bhi random string
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      secure: false, // agar HTTPS use kar rahe ho to true karna
+    },
+  })
+);
+
 app.use(cookieParser());
 // Controllers
 const authController = require("./controllers/authController");
@@ -17,12 +32,25 @@ const userServiceController = require("./controllers/userServiceController");
 // nodemailer setup
 const mailController = require("./mail/mailController");
 const adminController = require("./controllers/adminController");
+// QR Code Payment
+
+const QRCode = require("qrcode");
+
+// QR code generate route
+const payment = require("./payment/payment");
+app.get("/qr/:text", payment.generateQrCode);
 
 // Middleware
 const checkLoggedIn = require("./middleware/checkLoggenIn");
 const isLoggedIn = require("./middleware/isLoggedIn");
 const attachUser = require("./middleware/attachUser");
-//const isAdmin = require("./middleware/isAdmin");
+const isAdmin = require("./middleware/isAdmin");
+app.use(async (req, res, next) => {
+  if (req.session.userId) {
+    req.user = await User.findById(req.session.userId);
+  }
+  next();
+});
 
 app.use(attachUser.attachUser);
 // Set view engine and middleware
@@ -88,6 +116,37 @@ app.get("/", checkLoggedIn, (req, res) => {
 
 // Navigation Routes
 app.get("/buy", isLoggedIn, navController.buy);
+// controller
+app.get("/product/:id",isLoggedIn, navController.productDetails);
+app.get("/purchase/:id",isLoggedIn, navController.purchasePage);
+app.post("/purchase/:id",isLoggedIn, navController.handlePurchase);
+
+
+app.get("/payment/:orderId", async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.orderId).populate("productId");
+
+    const amount = order.quantity * order.productId.price;
+
+    // 🔹 UPI Deeplink
+    const upiLink = `upi://pay?pa=vishnukant2275@axisb&pn=EasyOrder&am=${amount}&cu=INR&tn=Order%20Payment`;
+
+    // 🔹 Generate QR
+    const qrCode = await QRCode.toDataURL(upiLink);
+
+    res.render("payment", {
+      order,
+      product: order.productId,
+      upiLink,
+      qrCode,
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error generating payment page");
+  }
+});
+
+
 app.get("/sell", isLoggedIn, navController.sell);
 app.post("/sell", isLoggedIn, navController.afterSell);
 app.get("/profile", isLoggedIn, navController.profile);
@@ -106,9 +165,12 @@ app.post("/contact", async (req, res) => {
   res.render("contactsuccess", { title: "Contact" });
 });
 
-app.post("/post", isLoggedIn, (req, res) => {
-  res.render("post", { title: "Post" });
-});
+app.post(
+  "/post",
+  isLoggedIn,
+  upload.single("image"),
+  userServiceController.uploadPost
+);
 
 app.get("/add-post", isLoggedIn, userServiceController.addPost);
 app.get("/cummunity", checkLoggedIn, userServiceController.community);
@@ -116,24 +178,57 @@ app.get("/services", userServiceController.services);
 app.get("/members", userServiceController.members);
 
 // Admin Routes - Add these before app.listen
-app.get("/admin", adminController.dashboard);
-app.get("/admin/products", adminController.products);
-app.post("/admin/products", upload.single("image"), adminController.addProduct);
+app.get("/admin/login", adminController.adminLoginPage);
+app.post("/admin/login", adminController.adminLogin);
+app.get("/admin/signup", adminController.adminSignupPage);
+app.post("/admin/signup", adminController.adminSignup);
+app.get("/admin/dashboard", isAdmin, adminController.dashboard);
+app.get("/admin/products", isAdmin, adminController.products);
+app.post(
+  "/admin/products",
+  isAdmin,
+  upload.single("image"),
+  adminController.addProduct
+);
 app.post(
   "/admin/products/:id",
+  isAdmin,
   upload.single("image"),
   adminController.updateProduct
 );
+app.get("/admin", isAdmin, adminController.dashboard);
+app.get("/admin/editproducts", isAdmin, adminController.editProduct);
 
-app.get("/admin/editproducts", adminController.editProduct);
+app.get("/admin/sell-requests", isAdmin, adminController.sellRequests);
+app.get("/admin/queries", isAdmin, adminController.queries);
+app.get("/admin/posts", isAdmin, adminController.posts);
+app.post("/admin/posts", isAdmin, adminController.approvePost);
+app.post("/admin/posts/:id/approve", isAdmin, adminController.approvePost);
+app.post("/admin/posts/:id/reject", isAdmin, adminController.rejectPost);
+app.delete("/admin/posts/:id", isAdmin, adminController.deletePost);
+app.get("/admin/users", isAdmin, adminController.users);
+app.delete("/admin/delete-user", isAdmin, adminController.deleteUser);
+app.delete("/admin/delete-product", isAdmin, adminController.deleteProduct);
+app.get("/admin/profile", isAdmin, adminController.adminProfile);
+const Order= require("./models/orders")
+app.get("/admin/orders/pending", async (req, res) => {
+  const orders = await Order.find({ status: "PendingPaymentStatus" }).populate("productId");
+  res.render("admin/orders", { orders });
+});
+app.get("/admin/orders/shipment", async (req, res) => {
+  const orders = await Order.find({ status: "PendingForShipment" }).populate("productId");
+  res.render("admin/shipment", { orders });
+});
 
-app.get("/admin/sell-requests", adminController.sellRequests);
-app.get("/admin/queries", adminController.queries);
-app.get("/admin/posts", adminController.posts);
-app.post("/admin/posts/:id/approve", adminController.approvePost);
-app.get("/admin/users", adminController.users);
-app.delete("/admin/delete-user", adminController.deleteUser);
-app.delete("/admin/delete-product", adminController.deleteProduct);
+app.post("/admin/orders/:id/approve", async (req, res) => {
+  await Order.findByIdAndUpdate(req.params.id, { status: "PendingForShipment" });
+  res.redirect("/admin/orders/pending");
+});
+
+app.post("/admin/orders/:id/reject", async (req, res) => {
+  await Order.findByIdAndUpdate(req.params.id, { status: "PaymentNotReceived" }); // ya phir status=Rejected bhi kar sakte ho
+  res.redirect("/admin/orders/pending");
+});
 
 // ---------------- Start Server ----------------
 app.listen(PORT, () => {

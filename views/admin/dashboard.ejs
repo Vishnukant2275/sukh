@@ -295,7 +295,7 @@
       <h2><i class="fas fa-shield-alt"></i> Admin Panel</h2>
       <nav>
         <div class="nav-item">
-          <a href="/admin" class="active">
+          <a href="/admin/dashboard" class="active">
             <i class="fas fa-home"></i> Dashboard
           </a>
         </div>
@@ -305,6 +305,16 @@
         <div class="nav-item">
           <a href="/admin/sell-requests">
             <i class="fas fa-shopping-cart"></i> Sell Requests
+          </a>
+        </div>
+        <div class="nav-item">
+          <a href="/admin/orders/pending">
+            <i class="fa-solid fa-bag-shopping"></i> Pending Orders
+          </a>
+        </div>
+        <div class="nav-item">
+          <a href="/admin/orders/shipment">
+            <i class="fa-solid fa-truck"></i> Pending Shipment
           </a>
         </div>
         <div class="nav-item">
@@ -327,7 +337,7 @@
     </div>
     <div class="content">
       <div class="page-header">
-        <h1>Dashboard Overview</h1>
+        <h1>Welcome! <%=admin.name%></h1>
         <span id="currentDate"></span>
       </div>
       <div class="stats-grid">
@@ -354,16 +364,33 @@
             <h3><i class="fas fa-shopping-cart"></i> Sell Requests</h3>
             <div class="number"><%= stats.sellRequests %></div>
           </div></a
-        >   <a
-          href="/admin/queries"
+        >
+        <a href="/admin/queries" style="text-decoration: none; color: inherit">
+          <div class="stat-card queries">
+            <h3><i class="fas fa-question-circle"></i> Pending Queries</h3>
+            <div class="number"><%= stats.queries %></div>
+          </div>
+          <a
+            href="/admin/orders/pending"
+            style="text-decoration: none; color: inherit"
+          >
+            <div class="stat-card requests">
+              <h3><i class="fa-solid fa-bag-shopping"></i>Pending Orders</h3>
+              <div class="number"><%= stats.order %></div>
+            </div></a
+          >
+        </a>
+        <a
+          href="/admin/orders/shipment"
           style="text-decoration: none; color: inherit"
         >
-        <div class="stat-card queries">
-          <h3><i class="fas fa-question-circle"></i> Pending Queries</h3>
-          <div class="number"><%= stats.queries %></div>
-        </div>
+          <div class="stat-card requests">
+            <h3><i class="fa-solid fa-truck"></i>Pending Shipment</h3>
+            <div class="number"><%= stats.shipment %></div>
+          </div></a
+        >
       </div>
-    </a>
+
       <div class="quick-actions">
         <h2>Quick Actions</h2>
         <div class="actions-grid">
@@ -398,31 +425,35 @@
       dateElement.textContent = new Date().toLocaleDateString("en-US", options);
 
       // Mobile menu functionality
-      const menuToggle = document.getElementById('menuToggle');
-      const sidebar = document.querySelector('.sidebar');
-      
-      menuToggle.addEventListener('click', () => {
-          sidebar.classList.toggle('active');
-          menuToggle.querySelector('i').classList.toggle('fa-bars');
-          menuToggle.querySelector('i').classList.toggle('fa-times');
+      const menuToggle = document.getElementById("menuToggle");
+      const sidebar = document.querySelector(".sidebar");
+
+      menuToggle.addEventListener("click", () => {
+        sidebar.classList.toggle("active");
+        menuToggle.querySelector("i").classList.toggle("fa-bars");
+        menuToggle.querySelector("i").classList.toggle("fa-times");
       });
 
       // Close menu when clicking outside
-      document.addEventListener('click', (e) => {
-          if (!sidebar.contains(e.target) && !menuToggle.contains(e.target) && sidebar.classList.contains('active')) {
-              sidebar.classList.remove('active');
-              menuToggle.querySelector('i').classList.add('fa-bars');
-              menuToggle.querySelector('i').classList.remove('fa-times');
-          }
+      document.addEventListener("click", (e) => {
+        if (
+          !sidebar.contains(e.target) &&
+          !menuToggle.contains(e.target) &&
+          sidebar.classList.contains("active")
+        ) {
+          sidebar.classList.remove("active");
+          menuToggle.querySelector("i").classList.add("fa-bars");
+          menuToggle.querySelector("i").classList.remove("fa-times");
+        }
       });
 
       // Close menu when clicking a link
-      document.querySelectorAll('.sidebar a').forEach(link => {
-          link.addEventListener('click', () => {
-              sidebar.classList.remove('active');
-              menuToggle.querySelector('i').classList.add('fa-bars');
-              menuToggle.querySelector('i').classList.remove('fa-times');
-          });
+      document.querySelectorAll(".sidebar a").forEach((link) => {
+        link.addEventListener("click", () => {
+          sidebar.classList.remove("active");
+          menuToggle.querySelector("i").classList.add("fa-bars");
+          menuToggle.querySelector("i").classList.remove("fa-times");
+        });
       });
     </script>
   </body>

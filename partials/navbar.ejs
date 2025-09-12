@@ -1,0 +1,91 @@
+<nav
+  class="navbar navbar-expand-lg navbar-light bg-white shadow-sm position-relative"
+>
+  <div class="container-fluid px-3">
+    <div class="d-flex align-items-center">
+      <button
+        class="navbar-toggler me-2"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarContent"
+        aria-expanded="true"
+        aria-controls="navbarContent"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <a
+        class="btn btn-outline-success position-relative me-2"
+        href="#"
+        id="cart-btn-navbar"
+      >
+        <i class="bi bi-cart"></i>
+        <span
+          class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+          id="cart-count"
+        >
+          0
+        </span>
+      </a>
+    </div>
+
+    <a class="navbar-brand mx-auto fw-bold text-success" href="/home">
+      Sukh🚜🌾👨‍🌾
+    </a>
+
+    <a href="/logout" class="btn btn-danger logout-mobile d-lg-none">
+      <i class="bi bi-box-arrow-right"></i>
+    </a>
+
+    <div class="collapse navbar-collapse show" id="navbarContent">
+      <ul class="navbar-nav me-4 mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active text-success fw-semibold" href="/home">
+            Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link fw-semibold" href="/buy"> Buy </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link fw-semibold" href="/sell"> Sell </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link fw-semibold" href="/aboutus"> About Us </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link fw-semibold" href="/contact"> Contact Us </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link fw-semibold" href="/profile"> My Profile </a>
+        </li>
+      </ul>
+
+      <form class="d-flex mx-auto my-2" style="max-width: 400px">
+        <input
+          class="form-control me-2"
+          type="search"
+          placeholder="Search products..."
+          aria-label="Search"
+        />
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
+
+      <ul
+        class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-center d-none d-lg-flex"
+      >
+        <li class="nav-item me-2">
+          <a class="btn btn-outline-secondary" href="/profile">
+            <i class="bi bi-person"></i> Profile
+          </a>
+        </li>
+        <li class="nav-item ms-2">
+          <a class="btn btn-danger" href="/logout">
+            <i class="bi bi-box-arrow-right"></i> Logout
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+;
