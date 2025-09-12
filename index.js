@@ -2,8 +2,10 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const db = require("./db");
 const app = express();
-const PORT = 3000;
+
 const multer = require("multer");
+require("dotenv").config();
+
 
 // Disk storage ki jagah memory storage use karna
 const storage = multer.memoryStorage();
@@ -231,6 +233,8 @@ app.post("/admin/orders/:id/reject", async (req, res) => {
 });
 
 // ---------------- Start Server ----------------
+
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server running on port http://localhost:${PORT}`);
 });

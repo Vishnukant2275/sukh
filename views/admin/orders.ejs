@@ -9,10 +9,7 @@
       rel="stylesheet"
     />
     <style>
-      body {
-        background: #f8f9fa;
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      }
+  
       .card {
         border-radius: 1rem;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
@@ -31,11 +28,37 @@
         color: #fff;
         font-weight: 500;
       }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        display: flex;
+        height: 100vh;
+        background: #f8f9fa;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .navbar {
+        width: 250px;
+        min-height: 100vh;
+        background-color: #333;
+        color: white;
+        padding: 20px;
+      }
+
+      .content {
+        flex: 1;
+        background: #f4f4f4;
+        padding: 20px;
+      }
     </style>
   </head>
   <body>
-    <%- include('../../partials/adminNavbar') %>
-    <div class="container py-5">
+    <!-- <div class="navbar"><%- include('../../partials/adminNavbar') %></div> -->
+    <div class="container content py-5">
       <h2 class="text-center mb-4 text-primary">📦 Pending Orders</h2>
 
       <% if (orders.length === 0) { %>
