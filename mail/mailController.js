@@ -15,22 +15,22 @@ const oAuth2Client = new google.auth.OAuth2(
 );
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
-async function transporter() {
-  const accessToken = await oAuth2Client.getAccessToken();
-  nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      type: "OAuth2",
-      user: process.env.EMAIL_USER,
-      clientId: CLIENT_ID,
-      clientSecret: CLIENT_SECRET,
-      refreshToken: REFRESH_TOKEN,
-      accessToken: accessToken.token,
-    },
-  });
-}
+let accessToken = "";
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    type: "OAuth2",
+    user: process.env.EMAIL_USER,
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    refreshToken: REFRESH_TOKEN,
+    accessToken: accessToken.token,
+  },
+});
 exports.sendMail = async () => {
   try {
+    accessToken = await oAuth2Client.getAccessToken();
     let info = await transporter.sendMail({
       from: '"Mail" <nodemailer.yourservice@gmail.com>',
       to: "vishnukant2275@gmail.com",
@@ -48,6 +48,7 @@ exports.sendMail = async () => {
 exports.sendMailAfterContactUs = async (to, name, message) => {
   console.log(to, name, message);
   try {
+    accessToken = await oAuth2Client.getAccessToken();
     let info = await transporter.sendMail({
       from: '"Sukh Team" <nodemailer.yourservice@gmail.com>',
       to: to,
@@ -84,10 +85,11 @@ exports.sendMailAfterContactUs = async (to, name, message) => {
 };
 
 exports.sendOtpMail = async (to) => {
+  accessToken = await oAuth2Client.getAccessToken();
   const otpCode = Math.floor(100000 + Math.random() * 900000).toString(); // 6 digit OTP
   const otpEntry = new Otp({ email: to, otp: otpCode });
   await otpEntry.save();
-  const accessToken = await oAuth2Client.getAccessToken();
+  
   const info = await transporter.sendMail({
     from: `"Sukh - FPO Portal" <${process.env.EMAIL_USER}>`,
     to,
@@ -103,6 +105,7 @@ exports.sendOtpMail = async (to) => {
 const User = require("../models/User");
 exports.sendPasswordMail = async (to) => {
   try {
+    accessToken = await oAuth2Client.getAccessToken();
     const user = await User.findOne({ email: to });
     if (!user) {
       console.error("No user found with email:", to);
@@ -151,6 +154,7 @@ exports.sellRequestMail = async (
   notes
 ) => {
   try {
+    accessToken = await oAuth2Client.getAccessToken();
     let info = await transporter.sendMail({
       from: '"Sukh Team" <nodemailer.yourservice@gmail.com>',
       to: to,
