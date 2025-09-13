@@ -33,7 +33,8 @@ async function getTransporter() {
 exports.sendOtpMail = async (to) => {
   const transporter = await getTransporter(); // ✅ fresh transporter
   const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
-
+  const otpEntry = new Otp({ email: to, otp: otpCode });
+  await otpEntry.save();
   await transporter.sendMail({
     from: `"Sukh - FPO Portal" <${process.env.EMAIL_USER}>`,
     to,
