@@ -1,15 +1,34 @@
 const Otp = require("../models/otp");
 
 const nodemailer = require("nodemailer");
+const { google } = require("googleapis");
 
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const REDIRECT_URI = "https://developers.google.com/oauthplayground";
+const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
+
+const oAuth2Client = new google.auth.OAuth2(
+  CLIENT_ID,
+  CLIENT_SECRET,
+  REDIRECT_URI
+);
+oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+async function accessToken() {
+  const accessToken = await oAuth2Client.getAccessToken();
+}
+accessToken();
 const transporter = nodemailer.createTransport({
-  service: "Gmail",
+  service: "gmail",
   auth: {
-    user: process.env.EMAIL_USER, // set on Railway
-    pass: process.env.EMAIL_PASS, // Gmail app password
+    type: "OAuth2",
+    user: process.env.EMAIL_USER,
+    clientId: CLIENT_ID,
+    clientSecret: CLIENT_SECRET,
+    refreshToken: REFRESH_TOKEN,
+    accessToken: accessToken.token,
   },
 });
-
 exports.sendMail = async () => {
   try {
     let info = await transporter.sendMail({
@@ -68,7 +87,7 @@ exports.sendOtpMail = async (to) => {
   const otpCode = Math.floor(100000 + Math.random() * 900000).toString(); // 6 digit OTP
   const otpEntry = new Otp({ email: to, otp: otpCode });
   await otpEntry.save();
-
+  const accessToken = await oAuth2Client.getAccessToken();
   const info = await transporter.sendMail({
     from: `"Sukh - FPO Portal" <${process.env.EMAIL_USER}>`,
     to,
@@ -80,7 +99,6 @@ exports.sendOtpMail = async (to) => {
   console.log("OTP sent:", info.messageId);
   return otpCode; // optionally return OTP for testing
 };
-
 
 const User = require("../models/User");
 exports.sendPasswordMail = async (to) => {
