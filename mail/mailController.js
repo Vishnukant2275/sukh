@@ -14,10 +14,12 @@ const oAuth2Client = new google.auth.OAuth2(
   REDIRECT_URI
 );
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+
 async function accessToken() {
   const accessToken = await oAuth2Client.getAccessToken();
+  return accessToken; // just return the value
 }
-accessToken();
+
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
